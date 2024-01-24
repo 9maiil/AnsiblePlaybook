@@ -61,6 +61,7 @@
         state: started
         ports:
           - "27017:27017"
+        restart_policy: always
         volumes:
           - "/home/liam/Desktop/Projekt/AnsiblePlaybook/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js"
       become: yes
@@ -72,6 +73,7 @@
         state: started
         ports:
           - "80:80"
+        restart_policy: always
       become: yes
 
     - name: Run npm commands
@@ -83,9 +85,23 @@
         chdir: "{{ local_folder_path }}"
       become: yes
 
-    - name: Start server.js with Node.js
-      command: "node /home/liam/Desktop/Projekt/AnsiblePlaybook/server.js"
-      args:
-        chdir: "{{ local_folder_path }}"
+    - name: Copy systemd service file
+      copy:
+        src: /home/liam/Projekt/AnsiblePlaybook/server.service
+        dest: /etc/systemd/system/server.service
       become: yes
+    
+    - name: Reload systemd manager configuration
+      systemd:
+        name: systemd
+        state: restarted
+      become: yes
+      
+    - name: Restart server service
+      systemd:
+        name: server
+        state: restarted
+      become: yes
+
+
 
