@@ -85,23 +85,6 @@
         chdir: "{{ local_folder_path }}"
       become: yes
 
-    - name: Copy systemd service file
-      copy:
-        src: /home/liam/Projekt/AnsiblePlaybook/server.service
-        dest: /etc/systemd/system/server.service
-      become: yes
-    
-    - name: Reload systemd manager configuration
-      systemd:
-        name: systemd
-        state: restarted
-      become: yes
-      
-    - name: Restart server service
-      systemd:
-        name: server
-        state: restarted
-      become: yes
 
 
 
