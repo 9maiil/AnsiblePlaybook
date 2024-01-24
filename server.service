@@ -1,0 +1,13 @@
+[Unit]
+Description=Node.js Server
+
+[Service]
+ExecStart=/usr/bin/node /home/liam/Desktop/Projekt/AnsiblePlaybook/server.js
+WorkingDirectory=/home/liam/Desktop/Projekt/AnsiblePlaybook
+Restart=always
+User=liam
+Group=liam
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=default.target
