@@ -61,6 +61,8 @@
         state: started
         ports:
           - "27017:27017"
+        volumes:
+          - "/home/liam/Desktop/Projekt/AnsiblePlaybook/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js"
       become: yes
 
     - name: Start Apache Docker container
