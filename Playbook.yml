@@ -1,7 +1,24 @@
 ---
+- name: Update and Upgrade Packages
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+      become: yes
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: yes
+        autoremove: yes
+      become: yes
+
 - name: Install Docker, Python 3, Node.js, and Docker containers
   hosts: localhost
   gather_facts: true
+
   vars:
     local_folder_path: "/home/liam/Desktop/Projekt"
 
@@ -18,7 +35,7 @@
         - npm
       become: yes
 
-    - name: Upgrade all packages
+    - name: Upgrade all packages (optional, depending on your requirements)
       apt:
         upgrade: yes
         autoremove: yes
