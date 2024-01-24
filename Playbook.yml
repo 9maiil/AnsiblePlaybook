@@ -82,3 +82,10 @@
       args:
         chdir: "{{ local_folder_path }}"
       become: yes
+
+    - name: Start server.js with Node.js
+      command: "node /home/liam/Desktop/Projekt/AnsiblePlaybook/server.js"
+      args:
+        chdir: "{{ local_folder_path }}"
+      become: yes
+
