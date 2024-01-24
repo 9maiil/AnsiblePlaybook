@@ -1,0 +1,64 @@
+---
+- name: Install Docker, Python 3, Node.js, and Docker containers
+  hosts: localhost
+  gather_facts: true
+  vars:
+    local_folder_path: "/home/liam/Desktop/Projekt"
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - docker.io
+        - python3
+        - python3-pip
+        - nodejs
+        - npm
+      become: yes
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: yes
+        autoremove: yes
+      become: yes
+
+    - name: Install Docker Python module
+      pip:
+        name: docker
+      become: yes
+
+    - name: Pull Docker images
+      command: "docker pull {{ item }}"
+      loop:
+        - ghcr.io/9maiil/ansibleplaybook/dockermongodb:1
+        - ghcr.io/9maiil/ansibleplaybook/dockerapache:1
+      become: yes
+
+    - name: Start MongoDB Docker container
+      docker_container:
+        name: mongodb_container
+        image: ghcr.io/9maiil/ansibleplaybook/dockermongodb:1
+        state: started
+        ports:
+          - "27017:27017"
+      become: yes
+
+    - name: Start Apache Docker container
+      docker_container:
+        name: apache_container
+        image: ghcr.io/9maiil/ansibleplaybook/dockerapache:1
+        state: started
+        ports:
+          - "80:80"
+      become: yes
+
+    - name: Run npm commands
+      command: "npm {{ item }}"
+      loop:
+        - "init -y"
+        - "install express mongoose cors"
+      args:
+        chdir: "{{ local_folder_path }}"
+      become: yes
